@@ -31,6 +31,13 @@ which would try to get response from the slow remote server for large data.
 * Threaded Thin         = Zbatery  + EventMachine + ThreadPool
 * Threaded Thin cluster = Rainbows + EventMachine + ThreadPool
 
+## Recommendation
+
+* I/O heavy applications => Zbatery + EventMachine + FiberSpawn
+* CPU heavy applications => Rainbows + EventMachine + ThreadPool
+* Not sure? => Zbatery + EventMachine + ThreadPool
+* JRuby => Puma
+
 ## What Server to Pick?
 
 Thread pool based: (for fast clients (i.e. have nginx or so in front) and
