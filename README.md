@@ -23,6 +23,14 @@ which would try to get response from the slow remote server for slow response.
 
 which would try to get response from the slow remote server for large data.
 
+## TL;DR
+
+* Puma                  = Zbatery  + ThreadPool
+* Thin                  = Zbatery  + EventMachine
+* Thin cluster          = Rainbows + EventMachine
+* Threaded Thin         = Zbatery  + EventMachine + ThreadPool
+* Threaded Thin cluster = Rainbows + EventMachine + ThreadPool
+
 ## What Server to Pick?
 
 Thread pool based: (for fast clients (i.e. have nginx or so in front) and
