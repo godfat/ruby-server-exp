@@ -29,7 +29,7 @@ class SlowApp
       self.get = get
       def initialize       ; @fiber, @data = Fiber.current, []; end
       def post_init        ; send_data(self.class.get)        ; end
-      def unbind           ; @fiber.resume(@data.join)        ; end
+      def unbind           ; @fiber.resume(@data)             ; end
       def receive_data data; @data << data                    ; end
       # we rely on the remote server closes the connection here
     } if defined?(EM)
@@ -39,7 +39,7 @@ class SlowApp
     # only eventmachine + fiber spawn falls here
     if defined?(EM) && Fiber.respond_to?(:current)
       EM.connect(HOST, PORT, @connection)
-      [200, {}, ["<pre>#{Fiber.yield}</pre>"]]
+      [200, {}, ["<pre>#{Fiber.yield.map(&:size).inject(&:+)}</pre>"]]
     else # eventmachine + thread should use normal socket
       sock = if defined?(FiberTCPSocket)
                FiberTCPSocket
