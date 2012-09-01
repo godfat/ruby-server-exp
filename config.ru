@@ -13,10 +13,34 @@ THROUGH = "GET /through HTTP/1.0\r\n\r\n"
 
 map '/cpu' do
   run lambda{ |env|
-    begin
-      timeout(rand){ true while true }
-    rescue Timeout::Error
-      OK
+    work = lambda{
+      begin
+        timeout(rand*2){ true while true }
+      rescue Timeout::Error
+        OK
+      end
+    }
+
+    if Fiber.respond_to?(:current)
+      if defined?(EM)
+        f = Fiber.current
+        r = nil
+        EM.defer(lambda{ r = work.call }, f.method(:resume))
+        Fiber.yield
+        r
+      else
+        f = Fiber.current
+        r = nil
+        Thread.new{
+          r = work.call
+          # tell rainbows to resume us in main thread
+          Rainbows::Fiber::ZZ[f] = Time.now - 1
+        }
+        Fiber.yield
+        r
+      end
+    else
+      work.call
     end
   }
 end
