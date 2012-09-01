@@ -15,7 +15,7 @@ map '/cpu' do
   run lambda{ |env|
     work = lambda{
       begin
-        timeout(rand*2){ true while true }
+        timeout(rand){ true while true }
       rescue Timeout::Error
         OK
       end
