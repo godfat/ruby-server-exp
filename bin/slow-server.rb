@@ -18,12 +18,12 @@ EM.run{
         work = lambda{
           if d = data.shift
             send_data(d)
-            EM.add_timer(rand(100)/1000.0, &work)
+            EM.add_timer(50/1000.0, &work)
           else
             close_connection(true)
           end
         }
-        EM.add_timer(rand(100)/1000.0, &work)
+        EM.add_timer(50/1000.0, &work)
 
       when /through/
         send_data(OK)
