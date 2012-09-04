@@ -1,3 +1,3 @@
 #!/bin/sh
 
-httperf --server localhost --port 8080 --uri /latency --rate 25 --num-conn 50 --num-call 2 --timeout 60
+httperf --hog --server localhost --port 8080 --uri /latency --num-calls 4 --burst-length 2 --num-conn 50 --rate 100 --timeout 60
