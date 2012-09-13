@@ -25,6 +25,7 @@ after_fork{ |_, _|
       @env[REMOTE_ADDR] = @_io.kgio_addr
       @env[ASYNC_CALLBACK] = method(:write_async_response)
       @env[ASYNC_CLOSE] = EM::DefaultDeferrable.new
+      @deferred = true
       EM.defer{
         status, headers, body = catch(:async) {
           APP.call(@env.merge!(RACK_DEFAULTS))
@@ -36,7 +37,6 @@ after_fork{ |_, _|
           ev_write_response(status, headers, body, @hp.next?)
         end
       }
-      @deferred = true
     end
   end
 }
