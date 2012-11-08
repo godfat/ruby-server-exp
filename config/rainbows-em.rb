@@ -5,9 +5,9 @@ timeout 30
 Rainbows! do
   use :EventMachine
   if defined?(Zbatery)
-    worker_connections      16*4
+    worker_connections      256*4
   else
-    worker_connections      16
+    worker_connections      256
   end
 
   client_max_body_size      5*1024*1024 # 5 megabytes
