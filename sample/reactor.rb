@@ -37,14 +37,17 @@ class Reactor
       data, callback = write_pairs[w.object_id]
       begin
         data.slice!(0, w.write_nonblock(data))
-        raise EOFError if data.empty?
+        write_callback(w, callback) if data.empty?
       rescue ::IO::WaitWritable
       rescue EOFError
-        write_pairs.delete(w.object_id)
-        write_socks.delete(w)
-        callback.call(w)
+        write_callback(w, callback)
       end
     }
+  end
+  def write_callback w, callback
+    write_pairs.delete(w.object_id)
+    write_socks.delete(w)
+    callback.call(w)
   end
 end
 
