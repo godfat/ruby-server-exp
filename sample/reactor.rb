@@ -49,7 +49,8 @@ class Reactor
 end
 
 reactor = Reactor.new
-reactor.write TCPSocket.new('example.com', 80), "GET / HTTP/1.0\r\n\r\n" do |sock|
+reactor.write TCPSocket.new('example.com', 80),
+              "GET / HTTP/1.0\r\n\r\n" do |sock|
   reactor.read sock do |response|
     print response
   end
